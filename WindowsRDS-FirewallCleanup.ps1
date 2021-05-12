@@ -1,6 +1,6 @@
-﻿#Script thanks to user js2010
-#source https://stackoverflow.com/a/40915201
-#added registry paths notes
+#Script derived from user js2010's Script
+#Source https://stackoverflow.com/a/40915201
+
 $profiles = get-wmiobject -class win32_userprofile
 
 ## Interactive Menu
