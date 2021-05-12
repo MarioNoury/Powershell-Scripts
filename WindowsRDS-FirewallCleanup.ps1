@@ -122,7 +122,7 @@ $result = measure-command {
 }
 
 $end = get-date
-write-host END $end 
-write-host ETA $eta
+write-host 'END - ' $end 
+write-host 'ETA - ' $eta
 
 write-host $result.minutes min $result.seconds sec
