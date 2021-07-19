@@ -1,7 +1,8 @@
-#Script derived from user js2010's Script
+﻿#Script derived from user js2010's Script
 #Source https://stackoverflow.com/a/40915201
 
 $profiles = get-wmiobject -class win32_userprofile
+$targetos = 0
 
 ## Interactive Menu
 function Show-Menu
@@ -20,39 +21,57 @@ function Show-Menu
 }
 
 #Catch argument / -2019 OR -2016
-$param1=$args[0]
-Write-Host $param1
-switch ($param1)
-{
-    '-2019' {
-        $selection = '1'
-        }
-    '-2016' {
-        $selection = '2'
-        }
-    default {
-        $selection = Show-Menu
-    } 
+if ($args.count -gt 0){ 
+  $param1=$args[0]
+  switch ($param1)
+    {
+        '-2019' {
+            $targetos = '1'
+            }
+        '-2016' {
+            $targetos = '2'
+            }
+        default {
+            $targetos = Show-Menu
+            } 
+    }
+}
+
+# OS Detection
+if ($targetos -eq 0) {
+  $osversion = Get-CimInstance Win32_Operatingsystem | Select-Object -expand Caption
+  if ($osversion -Match 'Windows Server 2019'){
+    Write-Host "WINDOWS SERVER 2019 DETECTED"
+    $targetos = 1
+  }
+  elseif ($osversion -Match 'Windows Server 2016') {
+    Write-Host "WINDOWS SERVER 2019 DETECTED" 
+    $targetos = 2
+  } 
+  else {
+    Write-Host "OS NOT DETECTED"
+    $targetos = Show-Menu
+  }
 }
 
 Clear-Host
 # cleanupPath variable assignation
-switch ($selection)
+switch ($targetos)
  {
-     '1' {
-         Write-Host "Windows Server 2019 Selected"
-         $cleanupPath = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\RestrictedServices\AppIso\FirewallRules"
-     } 
-     '2' {
-         Write-Host "Windows Server 2016 Selected"
-         $cleanupPath = "HKLM:\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\RestrictedServices\Configurable\System"
-     } 
-     'q' {
-         return
-     }
-     default {
-        return
-        }
+  '1' {
+      Write-Host "Windows Server 2019 Selected"
+      $cleanupPath = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\RestrictedServices\AppIso\FirewallRules"
+  } 
+  '2' {
+      Write-Host "Windows Server 2016 Selected"
+      $cleanupPath = "HKLM:\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\RestrictedServices\Configurable\System"
+  } 
+  'q' {
+      return
+  }
+  default {
+    return
+    }
  }
 
 #Start cleanup script
@@ -68,7 +87,7 @@ $rules2 = Get-NetFirewallRule -All -PolicyStore ConfigurableServiceStore |
   Where-Object { $profiles.sid -notcontains $_.owner -and $_.owner }
 
 $total = $rules.count + $rules2.count
-Write-Host "Deleting" $total "Firewall Rules:" -ForegroundColor Green
+Write-Host ">> " $total "Firewall Rules to delete . . ." -ForegroundColor Green
 
 $result = measure-command {
 
