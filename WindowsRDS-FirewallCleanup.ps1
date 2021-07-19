@@ -94,14 +94,14 @@ $rules2 = Get-NetFirewallRule -All -PolicyStore ConfigurableServiceStore |
   Where-Object { $profiles.sid -notcontains $_.owner -and $_.owner }
 
 $total = $rules.count + $rules2.count
-Write-Host ">>" -NoNewline
+Write-Host "|| " -NoNewline
 if ($total -gt 0) {
   Write-Host $total -ForegroundColor Red -NoNewline
 }
 else {
   Write-Host $total -ForegroundColor Green -NoNewline
 }
-Write-Host "Firewall Rules to delete . . ." 
+Write-Host " Firewall Rules to delete . . ." 
 
 $result = measure-command {
 
