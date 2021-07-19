@@ -77,7 +77,7 @@ switch ($targetos)
  }
 
 # Registry patch
-New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy' -Name  'DeleteUserAppContainersOnLogoff' -Value '1' -PropertyType 'DWORD' –Force
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy' -Name  'DeleteUserAppContainersOnLogoff' -Value '1' -PropertyType 'DWORD' –Force | Out-Null
 Write-Host "Registry patched !" -ForegroundColor Green
 
 #Start cleanup script
