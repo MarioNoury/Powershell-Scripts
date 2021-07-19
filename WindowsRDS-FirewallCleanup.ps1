@@ -11,6 +11,7 @@ function Show-Menu
         [string]$Title = 'Select Windows Server version'
     )
     Clear-Host
+    Write-host "`n `n `n `n "
     Write-Host $Title -ForegroundColor Green
     
     Write-Host "1: Windows Server 2019"
@@ -55,6 +56,7 @@ if ($targetos -eq 0) {
 }
 
 Clear-Host
+Write-Host "`n `n `n `n "
 # cleanupPath variable assignation
 switch ($targetos)
  {
@@ -75,7 +77,7 @@ switch ($targetos)
  }
 
 # Registry patch
-New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy' -Name  'DeleteUserAppContainersOnLogoff' -Value '1' -PropertyType 'DWORD' –Force | out-null
+New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy' -Name  'DeleteUserAppContainersOnLogoff' -Value '1' -PropertyType 'DWORD' –Force
 Write-Host "Registry patched !" -ForegroundColor Green
 
 #Start cleanup script
