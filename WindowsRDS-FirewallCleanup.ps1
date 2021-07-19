@@ -1,5 +1,6 @@
 ﻿#Script derived from user js2010's Script
 #Source https://stackoverflow.com/a/40915201
+Write-Host "Windows RDS - Firewall Cleanup script and patch `n `n `n `n `n `n `n"
 
 $profiles = get-wmiobject -class win32_userprofile
 $targetos = 0
@@ -11,7 +12,7 @@ function Show-Menu
         [string]$Title = 'Select Windows Server version'
     )
     Clear-Host
-    Write-host "`n `n `n `n "
+    Write-Host "Windows RDS - Firewall Cleanup script and patch `n `n `n `n `n `n `n"
     Write-Host $Title -ForegroundColor Green
     
     Write-Host "1: Windows Server 2019"
@@ -56,7 +57,7 @@ if ($targetos -eq 0) {
 }
 
 Clear-Host
-Write-Host "`n `n `n `n "
+Write-Host "Windows RDS - Firewall Cleanup script and patch `n `n `n `n `n `n `n"
 # cleanupPath variable assignation
 switch ($targetos)
  {
